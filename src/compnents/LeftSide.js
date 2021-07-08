@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 const LeftSide = (props) => {
@@ -9,7 +10,7 @@ const LeftSide = (props) => {
                     <CardBackground />
                     <a href='/'>
                         <Photo />
-                        <Link>Welcome, there!</Link>
+                        <Link>Welcome, {props.user ? props.user.displayName : 'there'}!</Link>
                     </a>
                     <a href='/'>
                         <AddPhotoText>Add a photo</AddPhotoText>
@@ -71,6 +72,10 @@ const UserInfo = styled.div`
     padding: 12px 12px 16px;
     word-wrap: break-word;
     word-break: break-word;
+
+    a{
+        text-decoration: none;
+    }
 `;
 const CardBackground = styled.div`
     background: url('/images/card-bg.svg');
@@ -208,4 +213,10 @@ const CommunityCard = styled(ArtCard)`
     }
 `;
 
-export default LeftSide;
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+};
+
+export default connect(mapStateToProps)(LeftSide);
