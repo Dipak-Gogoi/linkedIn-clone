@@ -25,7 +25,7 @@ const Main = (props) => {
 
     return (
         <Container>
-            <ShareBox>Share
+            <ShareBox>
                 <div>
                     <img src='/images/user.svg' alt='' />
                     <button onClick={handleClick}>Start a post</button>
