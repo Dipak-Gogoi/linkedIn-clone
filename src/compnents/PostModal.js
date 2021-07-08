@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 import { connect } from 'react-redux';
+import firebase from 'firebase';
+import { postArticleAPI } from '../actions';
 import styled from 'styled-components';
 
 const PostModal = (props) => {
@@ -24,6 +26,24 @@ const PostModal = (props) => {
         setShareImage('');
         setVideoLink('');
         setAssetArea(area);
+    };
+
+    const postArticle = (e) => {
+        e.preventDefault();
+
+        if (e.target !== e.currentTarget) {
+            return;
+        }
+
+        const payload = {
+            image: shareImage,
+            video: videoLink,
+            user: props.user,
+            description: editorText,
+            timestamp: firebase.firestore.Timestamp.now(),
+        };
+        props.postArticle(payload);
+        reset(e);
     };
 
     const reset = (e) => {
@@ -104,7 +124,12 @@ const PostModal = (props) => {
                                     <span>Anyone</span>
                                 </AssestButton>
                             </ShareComment>
-                            <PostButtom disabled={!editorText ? true : false}>Post</PostButtom>
+                            <PostButtom
+                                disabled={!editorText ? true : false}
+                                onClick={(event) => postArticle(event)}
+                            >
+                                Post
+                            </PostButtom>
                         </ShareCreation>
                     </Content>
                 </Container>
@@ -273,7 +298,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    // signIn: () => dispatch(signInAPI()),
+    postArticle: (payload) => dispatch(postArticleAPI(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostModal);
